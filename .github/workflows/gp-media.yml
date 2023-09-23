@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App MediaCollectionMVC20230922181851
+name: Build and deploy .NET Core application to Web App gp-media
 on:
   push:
     branches:
     - master
 env:
-  AZURE_WEBAPP_NAME: MediaCollectionMVC20230922181851
+  AZURE_WEBAPP_NAME: gp-media
   AZURE_WEBAPP_PACKAGE_PATH: .\published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.MediaCollectionMVC20230922181851_C123 }}
+        publish-profile: ${{ secrets.gp_media_023F }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
