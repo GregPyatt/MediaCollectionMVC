@@ -1,7 +1,14 @@
+using Azure.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
+var azureCredential = new DefaultAzureCredential();
+builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+var connStr = builder.Configuration.GetConnectionString("KeyVaultMediaDBConnectionString");
 
 var app = builder.Build();
 
