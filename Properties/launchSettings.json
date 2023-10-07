@@ -15,7 +15,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "AZURE_CLIENT_ID": "",
+        "AZURE_TENANT_ID": "",
+        "AZURE_CLIENT_SECRET": ""
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5285"
