@@ -1,6 +1,7 @@
 using Azure.Core.Diagnostics;
 using Azure.Identity;
-using Microsoft.Identity.Client;
+using Microsoft.EntityFrameworkCore;
+using MediaCollectionMVC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,40 +14,19 @@ builder.Services.AddControllersWithViews();
 //AZURE_TENANT_ID - id of the principal's Azure Active Directory tenant
 //AZURE_CLIENT_SECRET - one of the service principal's client secrets
 
+// Add Azure Key Vault to retrieve the connection string.
+var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
+var azureCredential = new DefaultAzureCredential();
+builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
+builder.Services.AddDbContext<MediaDbContext>(opt
+    => opt.UseSqlServer(cs));
 
-
-// From: Create an ASP.NET Core web app with Azure App Configuration
-// This is green underlined as a warning because the returned value COULD be null.
-//string connectionString = builder.Configuration.GetConnectionString("AppConfig");
-//builder.Configuration.AddAzureAppConfiguration(connectionString);
-//builder.Configuration.AddAzureKeyVault(
-//    new Uri($"https://gp-media-keyvault.vault.azure.net/"),
-//    new DefaultAzureCredential());
-
-// Suggested by Copilot
-//builder.Services.AddAzureAppConfiguration(options =>
-//{
-//    options.Connect(connectionString)
-//        .ConfigureKeyVault(kv =>
-//        {
-//            kv.SetCredential(new DefaultAzureCredential());
-//        });
-//});
-
-
-// Setup a listener to monitor logged events.
+// Add logging:setup a listener to monitor logged events.
 using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
-// From: Create an ASP.NET Core web app with Azure Key Vault
-var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl2").Value!);
-var azureCredential = new DefaultAzureCredential();
-//DefaultAzureCredentialOptions
-azureCredential.GetTokenAsync(new Azure.Core.TokenRequestContext(new[] { "https://gp-media-keyvault.vault.azure.net/" })).GetAwaiter().GetResult();
-builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
-var connStr = builder.Configuration.GetConnectionString("KeyVaultMediaDBConnectionString");
-var connStr2 = builder.Configuration.GetConnectionString("AppConfig");
-
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

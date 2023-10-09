@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MediaCollectionMVC.Models;
 
 public partial class ScannedMedium
 {
+    [Key]
     public int MediaId { get; set; }
 
     public string? Title { get; set; }
