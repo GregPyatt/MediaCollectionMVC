@@ -1,0 +1,149 @@
+﻿@model IEnumerable<MediaCollectionMVC.Models.ScannedMedium>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Authors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categories)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublishedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publisher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pages)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Isbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsRead)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReadingPeriods)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Summary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CoverPath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAudioBook)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPaperBook)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPdfbook)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDonated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DonationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Medium)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quality)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OktoDonate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Authors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categories)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublishedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pages)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isbn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsRead)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReadingPeriods)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Summary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoverPath)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAudioBook)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPaperBook)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPdfbook)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDonated)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DonationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Medium)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quality)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OktoDonate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MediaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MediaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MediaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

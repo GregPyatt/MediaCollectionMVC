@@ -14,13 +14,39 @@ builder.Services.AddControllersWithViews();
 //AZURE_TENANT_ID - id of the principal's Azure Active Directory tenant
 //AZURE_CLIENT_SECRET - one of the service principal's client secrets
 
-// Add Azure Key Vault to retrieve the connection string.
-var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
-var azureCredential = new DefaultAzureCredential();
-builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
-var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
-builder.Services.AddDbContext<MediaDbContext>(opt
-    => opt.UseSqlServer(cs));
+// let's find out what environment we're in:
+string stringEnvironment = builder.Environment.EnvironmentName.ToString();
+switch (stringEnvironment)
+{
+    case "Development":
+        //builder.Configuration.AddUserSecrets<Program>();
+        builder.Services.AddDbContext<MediaDbContext>(opt
+            => opt.UseSqlServer(builder.Configuration.GetConnectionString("CALIFORNIASTConnectionString")));
+
+        //CALIFORNIASTConnectionString
+        break;
+    case "Production":
+        // Add Azure Key Vault to retrieve the connection string.
+        var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
+        var azureCredential = new DefaultAzureCredential();
+        builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+        var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
+        builder.Services.AddDbContext<MediaDbContext>(opt
+            => opt.UseSqlServer(cs));
+        //builder.Configuration.AddAzureAppConfiguration(options =>
+        //{
+        //    options.Connect(new Uri(builder.Configuration.GetSection("AppConfigUrl").Value), new DefaultAzureCredential())
+        //        .ConfigureKeyVault(kv =>
+        //        {
+        //            kv.SetCredential(new DefaultAzureCredential());
+        //        });
+        //});
+        break;
+    default:
+        break;
+}
+
+
 
 // Add logging:setup a listener to monitor logged events.
 using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
