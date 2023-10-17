@@ -19,43 +19,43 @@ string stringEnvironment = builder.Environment.EnvironmentName.ToString();
 
 // Experimenting with using Production connection string but in development environment.
 // Add Azure Key Vault to retrieve the connection string.
-var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
-var azureCredential = new DefaultAzureCredential();
-builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
-var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
-builder.Services.AddDbContext<MediaDbContext>(opt
-    => opt.UseSqlServer(cs));
+//var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
+//var azureCredential = new DefaultAzureCredential();
+//builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+//var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
+//builder.Services.AddDbContext<MediaDbContext>(opt
+//    => opt.UseSqlServer(cs));
 
 
-//switch (stringEnvironment)
-//{
-//    case "Development":
-//        //builder.Configuration.AddUserSecrets<Program>();
-//        builder.Services.AddDbContext<MediaDbContext>(opt
-//            => opt.UseSqlServer(builder.Configuration.GetConnectionString("CALIFORNIASTConnectionString")));
+switch (stringEnvironment)
+{
+    case "Development":
+        //builder.Configuration.AddUserSecrets<Program>();
+        builder.Services.AddDbContext<MediaDbContext>(opt
+            => opt.UseSqlServer(builder.Configuration.GetConnectionString("CALIFORNIASTConnectionString")));
 
-//        //CALIFORNIASTConnectionString
-//        break;
-//    case "Production":
-//        // Add Azure Key Vault to retrieve the connection string.
-//        var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
-//        var azureCredential = new DefaultAzureCredential();
-//        builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
-//        var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
-//        builder.Services.AddDbContext<MediaDbContext>(opt
-//            => opt.UseSqlServer(cs));
-//        //builder.Configuration.AddAzureAppConfiguration(options =>
-//        //{
-//        //    options.Connect(new Uri(builder.Configuration.GetSection("AppConfigUrl").Value), new DefaultAzureCredential())
-//        //        .ConfigureKeyVault(kv =>
-//        //        {
-//        //            kv.SetCredential(new DefaultAzureCredential());
-//        //        });
-//        //});
-//        break;
-//    default:
-//        break;
-//}
+        //CALIFORNIASTConnectionString
+        break;
+    case "Production":
+        // Add Azure Key Vault to retrieve the connection string.
+        var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
+        var azureCredential = new DefaultAzureCredential();
+        builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
+        var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
+        builder.Services.AddDbContext<MediaDbContext>(opt
+            => opt.UseSqlServer(cs));
+        //builder.Configuration.AddAzureAppConfiguration(options =>
+        //{
+        //    options.Connect(new Uri(builder.Configuration.GetSection("AppConfigUrl").Value), new DefaultAzureCredential())
+        //        .ConfigureKeyVault(kv =>
+        //        {
+        //            kv.SetCredential(new DefaultAzureCredential());
+        //        });
+        //});
+        break;
+    default:
+        break;
+}
 
 
 

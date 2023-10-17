@@ -18,5 +18,10 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: rgb(125, 207, 182);
+}
+
+.navbar {
+    background-color: rgb(157, 92, 99);
 }
