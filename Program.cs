@@ -17,20 +17,13 @@ builder.Services.AddControllersWithViews();
 // let's find out what environment we're in:
 string stringEnvironment = builder.Environment.EnvironmentName.ToString();
 
-// Experimenting with using Production connection string but in development environment.
-// Add Azure Key Vault to retrieve the connection string.
-//var keyVaultUrl = new Uri(builder.Configuration.GetSection("KeyVaultUrl").Value!);
-//var azureCredential = new DefaultAzureCredential();
-//builder.Configuration.AddAzureKeyVault(keyVaultUrl, azureCredential);
-//var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
-//builder.Services.AddDbContext<MediaDbContext>(opt
-//    => opt.UseSqlServer(cs));
-
 
 switch (stringEnvironment)
 {
     case "Development":
-        //builder.Configuration.AddUserSecrets<Program>();
+        // Scope of MediaDbContext is Scoped by default.
+        // Scoped means the context object lifetime coincides with the web request life time,
+        // and the Dispose method will be called automatically at the end of the web request.
         builder.Services.AddDbContext<MediaDbContext>(opt
             => opt.UseSqlServer(builder.Configuration.GetConnectionString("CALIFORNIASTConnectionString")));
 
@@ -44,15 +37,7 @@ switch (stringEnvironment)
         var cs = builder.Configuration.GetSection("KeyVaultMediaDBConnectionString").Value;
         builder.Services.AddDbContext<MediaDbContext>(opt
             => opt.UseSqlServer(cs));
-        //builder.Configuration.AddAzureAppConfiguration(options =>
-        //{
-        //    options.Connect(new Uri(builder.Configuration.GetSection("AppConfigUrl").Value), new DefaultAzureCredential())
-        //        .ConfigureKeyVault(kv =>
-        //        {
-        //            kv.SetCredential(new DefaultAzureCredential());
-        //        });
-        //});
-        break;
+         break;
     default:
         break;
 }

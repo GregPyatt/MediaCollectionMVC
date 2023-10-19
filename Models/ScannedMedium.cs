@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MediaCollectionMVC.Models;
 
@@ -15,11 +17,17 @@ public partial class ScannedMedium
 
     public string? Categories { get; set; }
 
+    [NotMapped]
+    public List<SelectListItem>? CategoryNames { get; set; }
+
     [Display(Name = "Published Date")]
     [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? PublishedDate { get; set; }
 
     public string? Publisher { get; set; }
+
+    [NotMapped]
+    public List<SelectListItem>? PublisherNames { get; set; }
 
     public int? Pages { get; set; }
 

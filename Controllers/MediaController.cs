@@ -20,9 +20,14 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()  // int? pageNumber
         {
-              return _context.ScannedMedia != null ? 
+
+
+            //int pageSize = 3;
+            //return View(await PaginatedList<ScannedMedium>.CreateAsync(_context.ScannedMedia, pageNumber ?? 1, pageSize));
+
+            return _context.ScannedMedia != null ?
                           View(await _context.ScannedMedia.ToListAsync()) :
                           Problem("Entity set 'MediaDbContext.ScannedMedia'  is null.");
         }
@@ -46,9 +51,29 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()  // You could alternatively use public IActionResult Create() and create the data of the View synchronously.
         {
-            return View();
+
+            // This should popuate the dropdown list for CategoryNames
+            // Create a new model
+            var model = new ScannedMedium();
+
+            // Populate the CategoryNames property with the distinct categories from the database
+            model.CategoryNames = _context.ScannedMedia
+                .Select(m => m.Categories)
+                .Distinct()
+                .Select(c => new SelectListItem { Value = c, Text = c })
+                .ToList();
+
+            // Populate the PublisherNames property with the distinct publishers from the database
+            model.PublisherNames = _context.ScannedMedia
+                .Select(m => m.Publisher)
+                .Distinct()
+                .Select(p => new SelectListItem { Value = p, Text = p })
+                .ToList();
+
+
+            return View(model);
         }
 
         // POST: ScannedMediums/Create
@@ -80,6 +105,21 @@ namespace MediaCollectionMVC.Controllers
             {
                 return NotFound();
             }
+
+            // This should popuate the dropdown list for CategoryNames
+            // Note: You may need to put this section in the Edit(int, bind) overload below.
+            scannedMedium.CategoryNames = _context.ScannedMedia
+                    .Select(m => m.Categories)
+                    .Distinct()
+                    .Select(c => new SelectListItem { Value = c, Text = c })
+                    .ToList();
+
+            scannedMedium.PublisherNames = _context.ScannedMedia
+                    .Select(m => m.Publisher)
+                    .Distinct()
+                    .Select(c => new SelectListItem { Value = c, Text = c })
+                    .ToList();
+
             return View(scannedMedium);
         }
 
