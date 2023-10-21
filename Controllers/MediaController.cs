@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MediaCollectionMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MediaCollectionMVC;
-using MediaCollectionMVC.Models;
+using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MediaCollectionMVC.Controllers
 {
@@ -20,16 +17,58 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums
-        public async Task<IActionResult> Index()  // int? pageNumber
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10)
         {
+            // Get the total number of data objects
+            int count = await _context.ScannedMedia.CountAsync();
 
+            // Retrieve the data objects for the current page
+            var dataObjects = await _context.ScannedMedia
+                .OrderBy(sm => sm.Title)
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+
+            // Create a new instance of your view model
+            var model = new ScannedMediumViewModel
+            {
+                ScannedMediaObjects = dataObjects,
+                Pagination = new PaginationModel
+                {
+                    CurrentPage = pageIndex,
+                    ItemsPerPage = pageSize,
+                    TotalItems = count
+                }
+            };
+
+            return View(model);
+
+            //=> View(repository.Products
+            //.OrderBy(p => p.ProductID)
+            //.Skip((productPage - 1) * PageSize)
+            //.Take(PageSize));
 
             //int pageSize = 3;
             //return View(await PaginatedList<ScannedMedium>.CreateAsync(_context.ScannedMedia, pageNumber ?? 1, pageSize));
 
-            return _context.ScannedMedia != null ?
-                          View(await _context.ScannedMedia.ToListAsync()) :
-                          Problem("Entity set 'MediaDbContext.ScannedMedia'  is null.");
+
+            //List<ScannedMedium> dataList = new List<ScannedMedium>();
+            //if (_context.ScannedMedia != null) {
+            //    dataList = await _context.ScannedMedia.ToListAsync();
+            //    dataList.Sort((x, y) => x.Title.CompareTo(y.Title));
+            //}
+            //return View(dataList);
+
+            //IActionResult returnedValue = _context.ScannedMedia != null ?
+            //    View(await _context.ScannedMedia.ToListAsync()
+            //        .OrderBy(p => p.Title)) :
+            //    Problem("Entity set 'MediaDbContext.ScannedMedia'  is null.");
+
+            //return returnedValue;
+            //return _context.ScannedMedia != null ?
+            //              View(await _context.ScannedMedia.ToListAsync()) :
+            //              Problem("Entity set 'MediaDbContext.ScannedMedia'  is null.");
         }
 
         // GET: ScannedMediums/Details/5

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MediaCollectionMVC.Models.ScannedMedium>
+﻿@model ScannedMediumViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,32 +9,55 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
+<!-- Added for pagination -->
+<nav>
+    <ul class="pagination">
+        <li class="page-item @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1 })">Previous</a>
+        </li>
+        @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+            </li>
+        }
+        <li class="page-item @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage + 1 })">Next</a>
+        </li>
+    </ul>
+</nav>
+
+
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Authors)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categories)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PublishedDate)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Publisher)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Pages)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Isbn)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsRead)
+                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)
             </th>
             @*
             <th>
@@ -78,7 +101,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.ScannedMediaObjects) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
