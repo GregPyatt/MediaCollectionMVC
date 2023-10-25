@@ -25,3 +25,12 @@ body {
 .navbar {
     background-color: rgb(157, 92, 99);
 }
+
+/*.navbar-light .navbar-nav .nav-link {
+    color: red;
+}*/
+
+a.nav-link.text-dark {
+    color: white !important;
+    font-size: 48px;  
+}   

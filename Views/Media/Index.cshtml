@@ -1,6 +1,8 @@
 ﻿@model ScannedMediumViewModel
-
 @{
+    int MaxPageButtons = 25;
+    int HalfPageButtons = MaxPageButtons / 2; // Division of integers is rounded down.
+
     ViewData["Title"] = "Index";
 }
 
@@ -14,17 +16,52 @@
 <!-- Added for pagination -->
 <nav>
     <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = 1 })">First</a>
+        </li>
         <li class="page-item @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")">
             <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1 })">Previous</a>
         </li>
-        @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+        @if (Model.Pagination.TotalPages >= MaxPageButtons)
         {
-            <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
-            </li>
+            switch (Model.Pagination.CurrentPage)
+            {
+                case int j when j < HalfPageButtons:
+                    for (int i = 1; i <= MaxPageButtons; i++)
+                    {
+                        <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                        </li>
+                    }
+                    break;
+
+                case int j when j >= HalfPageButtons && j + MaxPageButtons <= Model.Pagination.TotalPages:
+                        for (int i = Model.Pagination.CurrentPage - HalfPageButtons + 1; i < Model.Pagination.CurrentPage + HalfPageButtons + 1; i++)
+                        {
+                            <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                            </li>
+                        }
+                    break;
+
+                case int j when j > Model.Pagination.TotalPages - MaxPageButtons:
+                        for (int i = Model.Pagination.TotalPages - MaxPageButtons; i <= Model.Pagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                            </li>
+                        }
+                    break;
+                default: 
+                    break;
+            }
+
         }
         <li class="page-item @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")">
             <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage + 1 })">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.TotalPages })">Last</a>
         </li>
     </ul>
 </nav>
@@ -165,7 +202,7 @@
                 @Html.DisplayFor(modelItem => item.OktoDonate)
             </td> 
             *@
-            <td>
+            <td style="width: 15%">
                 <a asp-action="Edit" asp-route-id="@item.MediaId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.MediaId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.MediaId">Delete</a>
