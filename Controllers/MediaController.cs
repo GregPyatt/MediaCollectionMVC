@@ -1,12 +1,20 @@
 ﻿using MediaCollectionMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MediaCollectionMVC.Controllers
 {
+    public enum SortField
+    {
+
+    }
+
+
     public class MediaController : Controller
     {
         private readonly MediaDbContext _context;
@@ -17,17 +25,61 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums
-        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10, string? sortField="Title", bool sortDir=true)
         {
             // Get the total number of data objects
             int count = await _context.ScannedMedia.CountAsync();
 
-            // Retrieve the data objects for the current page
-            var dataObjects = await _context.ScannedMedia
-                .OrderBy(sm => sm.Title)
-                .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+ 
+
+            //var dataObjects = await _context.ScannedMedia
+                //.Skip((pageIndex - 1) * pageSize)
+                //.Take(pageSize)
+                //.ToListAsync();
+
+
+            IQueryable<ScannedMedium> query = _context.ScannedMedia;
+
+ 
+            switch (sortField)
+            {
+                case "Title":
+                    query = query.OrderBy(e => e.Title);
+                    break;
+                case "Authors":
+                    query = query.OrderBy(e => e.Authors);
+                    break;
+                case "Categories":
+                    query = query.OrderBy(e => e.Categories);
+                    break;
+                case "PublishedDate":
+                    query = query.OrderBy(e => e.PublishedDate);
+                    break;
+                case "Publisher":
+                    query = query.OrderBy(e => e.Publisher);
+                    break;
+                case "Pages":
+                    query = query.OrderBy(e => e.Pages);
+                    break;
+                case "Isbn":
+                    query = query.OrderBy(e => e.Isbn);
+                    break;
+                case "IsRead":
+                    query = query.OrderBy(e => e.IsRead);
+                    break;
+                default:
+                    query = query.OrderBy(e => e.Title);
+                    break;
+            }
+
+            query = query.Skip((pageIndex - 1) * pageSize);
+            query = query.Take(pageSize);
+
+            var dataObjects = await query.ToListAsync();
+
+
+
+
 
 
             // Create a new instance of your view model
@@ -43,32 +95,44 @@ namespace MediaCollectionMVC.Controllers
             };
 
             return View(model);
-
-            //=> View(repository.Products
-            //.OrderBy(p => p.ProductID)
-            //.Skip((productPage - 1) * PageSize)
-            //.Take(PageSize));
-
-            //int pageSize = 3;
-            //return View(await PaginatedList<ScannedMedium>.CreateAsync(_context.ScannedMedia, pageNumber ?? 1, pageSize));
+        }
 
 
-            //List<ScannedMedium> dataList = new List<ScannedMedium>();
-            //if (_context.ScannedMedia != null) {
-            //    dataList = await _context.ScannedMedia.ToListAsync();
-            //    dataList.Sort((x, y) => x.Title.CompareTo(y.Title));
-            //}
-            //return View(dataList);
+        public async Task<List<ScannedMedium>> GetOrderedDataAsync(string orderByProperty)
+        {
+            IQueryable<ScannedMedium> query = _context.ScannedMedia;
 
-            //IActionResult returnedValue = _context.ScannedMedia != null ?
-            //    View(await _context.ScannedMedia.ToListAsync()
-            //        .OrderBy(p => p.Title)) :
-            //    Problem("Entity set 'MediaDbContext.ScannedMedia'  is null.");
+            switch (orderByProperty)
+            {
+                case "Title":
+                    query = query.OrderBy(e => e.Title);
+                    break;
+                case "Authors":
+                    query = query.OrderBy(e => e.Authors);
+                    break;
+                case "Categories":
+                    query = query.OrderBy(e => e.Categories);
+                    break;
+                case "PublishedDate":
+                    query = query.OrderBy(e => e.PublishedDate);
+                    break;
+                case "Publisher":
+                    query = query.OrderBy(e => e.Publisher);
+                    break;
+                case "Pages":
+                    query = query.OrderBy(e => e.Pages);
+                    break;
+                case "Isbn":
+                    query = query.OrderBy(e => e.Isbn);
+                    break;
+                case "IsRead":
+                    query = query.OrderBy(e => e.IsRead);
+                    break;
+                default:
+                    throw new InvalidOperationException($"'{orderByProperty}' is not a valid order by property");
+            }
 
-            //return returnedValue;
-            //return _context.ScannedMedia != null ?
-            //              View(await _context.ScannedMedia.ToListAsync()) :
-            //              Problem("Entity set 'MediaDbContext.ScannedMedia'  is null.");
+            return await query.ToListAsync();
         }
 
         // GET: ScannedMediums/Details/5

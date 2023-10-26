@@ -22,7 +22,7 @@
         <li class="page-item @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")">
             <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1 })">Previous</a>
         </li>
-        @if (Model.Pagination.TotalPages >= MaxPageButtons)
+        @if (Model.Pagination.TotalPages >= MaxPageButtons)  // You need to deal with the else case.
         {
             switch (Model.Pagination.CurrentPage)
             {
@@ -73,28 +73,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)
+                <a href="@Url.Action("Index", new {sortField="Title"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)
+                <a href="@Url.Action("Index", new {sortField="Authors"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)
+                <a href="@Url.Action("Index", new {sortField="Categories"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)
+                <a href="@Url.Action("Index", new {sortField="PublishedDate"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)
+                <a href="@Url.Action("Index", new {sortField="Publisher"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)
+                <a href="@Url.Action("Index", new {sortField="Pages"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)
+                <a href="@Url.Action("Index", new {sortField="Isbn"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)
+                <a href="@Url.Action("Index", new {sortField="IsRead"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)</a>
             </th>
             @*
             <th>
