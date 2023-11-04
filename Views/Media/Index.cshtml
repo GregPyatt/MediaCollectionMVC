@@ -2,7 +2,7 @@
 @{
     int MaxPageButtons = 25;
     int HalfPageButtons = MaxPageButtons / 2; // Division of integers is rounded down.
-
+    string pageSortField = Model.MediaSort.LastSort;
     ViewData["Title"] = "Index";
 }
 
@@ -17,10 +17,10 @@
 <nav>
     <ul class="pagination">
         <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = 1 })">First</a>
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = 1, sortField=pageSortField })">First</a>
         </li>
         <li class="page-item @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1 })">Previous</a>
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1, sortField=pageSortField })">Previous</a>
         </li>
         @if (Model.Pagination.TotalPages >= MaxPageButtons)  // You need to deal with the else case.
         {
@@ -30,7 +30,7 @@
                     for (int i = 1; i <= MaxPageButtons; i++)
                     {
                         <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=pageSortField })">@i</a>
                         </li>
                     }
                     break;
@@ -39,7 +39,7 @@
                         for (int i = Model.Pagination.CurrentPage - HalfPageButtons + 1; i < Model.Pagination.CurrentPage + HalfPageButtons + 1; i++)
                         {
                             <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=pageSortField })">@i</a>
                             </li>
                         }
                     break;
@@ -48,7 +48,7 @@
                         for (int i = Model.Pagination.TotalPages - MaxPageButtons; i <= Model.Pagination.TotalPages; i++)
                         {
                             <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                                <a class="page-link" href="@Url.Action("Index", new { pageIndex = i })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=pageSortField })">@i</a>
                             </li>
                         }
                     break;
@@ -58,10 +58,10 @@
 
         }
         <li class="page-item @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage + 1 })">Next</a>
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage + 1, sortField=pageSortField })">Next</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.TotalPages })">Last</a>
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.TotalPages, sortField=pageSortField })">Last</a>
         </li>
     </ul>
 </nav>
@@ -73,69 +73,30 @@
     <thead>
         <tr>
             <th>
-                <a href="@Url.Action("Index", new {sortField="Title"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.TitleSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="Authors"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.AuthorSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="Categories"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.CategorySortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="PublishedDate"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.PublishedDateSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="Publisher"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.PublisherSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="Pages"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.PagesSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="Isbn"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.ISBNSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)</a>
             </th>
             <th>
-                <a href="@Url.Action("Index", new {sortField="IsRead"})">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.IsReadSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)</a>
             </th>
-            @*
-            <th>
-                @Html.DisplayNameFor(model => model.ReadingPeriods)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comments)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Summary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CoverPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsAudioBook)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaperBook)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPdfbook)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDonated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DonationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Medium)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quality)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OktoDonate)
-            </th>
-            *@
-            <th></th>
-        </tr>
+          </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.ScannedMediaObjects) {
@@ -164,50 +125,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsRead)
             </td>
-            @*
-            <td>
-                @Html.DisplayFor(modelItem => item.ReadingPeriods)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comments)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Summary)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CoverPath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAudioBook)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPaperBook)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPdfbook)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDonated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DonationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Medium)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quality)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OktoDonate)
-            </td> 
-            *@
             <td style="width: 15%">
-                <a asp-action="Edit" asp-route-id="@item.MediaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MediaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MediaId">Delete</a>
+                    <a href="/Media/Edit?id=@item.MediaId">Edit</a> |
+                    <a href="/Media/Details?id=@item.MediaId">Details</a> |
+                    <a href="/Media/Delete?id=@item.MediaId">Delete</a>
             </td>
         </tr>
+
 }
     </tbody>
 </table>

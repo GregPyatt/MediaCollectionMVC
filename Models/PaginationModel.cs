@@ -1,4 +1,4 @@
-﻿namespace MediaCollectionMVC
+﻿namespace MediaCollectionMVC.Models
 {
     public class PaginationModel
     {

@@ -1,19 +1,12 @@
 ﻿using MediaCollectionMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 using System.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MediaCollectionMVC.Controllers
 {
-    public enum SortField
-    {
-
-    }
-
 
     public class MediaController : Controller
     {
@@ -25,48 +18,72 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums
-        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10, string? sortField="Title", bool sortDir=true)
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10, string sortField = "Title_asc", string searchTerm = "")
         {
             // Get the total number of data objects
             int count = await _context.ScannedMedia.CountAsync();
 
- 
+            searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.ToLower();
 
-            //var dataObjects = await _context.ScannedMedia
-                //.Skip((pageIndex - 1) * pageSize)
-                //.Take(pageSize)
-                //.ToListAsync();
+            // IQueryable<ScannedMedium> query = _context.ScannedMedia;
 
+            IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia  // var media
+                                               where searchTerm == "" || sm.Title.ToLower().Contains(sortField)
+                                               select sm);
 
-            IQueryable<ScannedMedium> query = _context.ScannedMedia;
-
- 
             switch (sortField)
             {
-                case "Title":
+                // Ascending
+                case "Title_asc":
                     query = query.OrderBy(e => e.Title);
                     break;
-                case "Authors":
+                case "Authors_asc":
                     query = query.OrderBy(e => e.Authors);
                     break;
-                case "Categories":
+                case "Categories_asc":
                     query = query.OrderBy(e => e.Categories);
                     break;
-                case "PublishedDate":
+                case "PublishedDate_asc":
                     query = query.OrderBy(e => e.PublishedDate);
                     break;
-                case "Publisher":
+                case "Publisher_asc":
                     query = query.OrderBy(e => e.Publisher);
                     break;
-                case "Pages":
+                case "Pages_asc":
                     query = query.OrderBy(e => e.Pages);
                     break;
-                case "Isbn":
+                case "Isbn_asc":
                     query = query.OrderBy(e => e.Isbn);
                     break;
-                case "IsRead":
+                case "IsRead_asc":
                     query = query.OrderBy(e => e.IsRead);
                     break;
+                // Descending
+                case "Title_desc":
+                    query = query.OrderByDescending(e => e.Title);
+                    break;
+                case "Authors_desc":
+                    query = query.OrderByDescending(e => e.Authors);
+                    break;
+                case "Categories_desc":
+                    query = query.OrderByDescending(e => e.Categories);
+                    break;
+                case "PublishedDate_desc":
+                    query = query.OrderByDescending(e => e.PublishedDate);
+                    break;
+                case "Publisher_desc":
+                    query = query.OrderByDescending(e => e.Publisher);
+                    break;
+                case "Pages_desc":
+                    query = query.OrderByDescending(e => e.Pages);
+                    break;
+                case "Isbn_desc":
+                    query = query.OrderByDescending(e => e.Isbn);
+                    break;
+                case "IsRead_desc":
+                    query = query.OrderByDescending(e => e.IsRead);
+                    break;
+
                 default:
                     query = query.OrderBy(e => e.Title);
                     break;
@@ -77,11 +94,6 @@ namespace MediaCollectionMVC.Controllers
 
             var dataObjects = await query.ToListAsync();
 
-
-
-
-
-
             // Create a new instance of your view model
             var model = new ScannedMediumViewModel
             {
@@ -91,50 +103,25 @@ namespace MediaCollectionMVC.Controllers
                     CurrentPage = pageIndex,
                     ItemsPerPage = pageSize,
                     TotalItems = count
+                },
+                MediaSort = new MediaSortModel
+                {
+                    TitleSortOrder = (sortField == "Title_asc") ? "Title_desc" : "Title_asc",
+                    AuthorSortOrder = (sortField == "Authors_asc") ? "Authors_desc" : "Authors_asc",
+                    CategorySortOrder = (sortField == "Categories_asc") ? "Categories_desc" : "Categories_asc",
+                    PublishedDateSortOrder = (sortField == "PublishedDate_asc") ? "PublishedDate_desc" : "PublishedDate_asc",
+                    PublisherSortOrder = (sortField == "Publisher_asc") ? "Publisher_desc" : "Publisher_asc",
+                    PagesSortOrder = (sortField == "Pages_asc") ? "Pages_desc" : "Pages_asc",
+                    ISBNSortOrder = (sortField == "ISBN_asc") ? "ISBN_desc" : "ISBN_asc",
+                    IsReadSortOrder = (sortField == "IsRead_asc") ? "IsRead_desc" : "IsRead_asc",
+                    LastSort = !string.IsNullOrEmpty(sortField) ? sortField : "Title_asc" 
                 }
             };
 
             return View(model);
         }
 
-
-        public async Task<List<ScannedMedium>> GetOrderedDataAsync(string orderByProperty)
-        {
-            IQueryable<ScannedMedium> query = _context.ScannedMedia;
-
-            switch (orderByProperty)
-            {
-                case "Title":
-                    query = query.OrderBy(e => e.Title);
-                    break;
-                case "Authors":
-                    query = query.OrderBy(e => e.Authors);
-                    break;
-                case "Categories":
-                    query = query.OrderBy(e => e.Categories);
-                    break;
-                case "PublishedDate":
-                    query = query.OrderBy(e => e.PublishedDate);
-                    break;
-                case "Publisher":
-                    query = query.OrderBy(e => e.Publisher);
-                    break;
-                case "Pages":
-                    query = query.OrderBy(e => e.Pages);
-                    break;
-                case "Isbn":
-                    query = query.OrderBy(e => e.Isbn);
-                    break;
-                case "IsRead":
-                    query = query.OrderBy(e => e.IsRead);
-                    break;
-                default:
-                    throw new InvalidOperationException($"'{orderByProperty}' is not a valid order by property");
-            }
-
-            return await query.ToListAsync();
-        }
-
+ 
         // GET: ScannedMediums/Details/5
         public async Task<IActionResult> Details(int? id)
         {
