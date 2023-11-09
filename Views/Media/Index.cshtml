@@ -11,8 +11,19 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-
-
+<!-- Search still needs work.  For instance when more than 10 records are returned e.g. searching "Programming" -->
+<form asp-action="Index">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- is the value needed? -->
+            <input name="searchTerm" class="form-control" placeholder="Search by title" value="@ViewData["CurrentFilter"]" /> 
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-info">Search</button>
+        </div>
+    </div>
+</form>
+<br />
 <!-- Added for pagination -->
 <nav>
     <ul class="pagination">

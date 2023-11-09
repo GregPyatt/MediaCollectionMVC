@@ -19,7 +19,25 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: rgb(125, 207, 182);
+    background-color: rgb(64, 54, 38);
+    color: cornsilk;
+}
+
+a {
+    color: #8397b9;
+}
+
+hr { 
+    background-color: cornsilk;
+}
+
+thead {
+    background-color: #856F4A;
+    color: #8397b9;
+}
+
+td {
+    color: cornsilk;
 }
 
 .navbar {

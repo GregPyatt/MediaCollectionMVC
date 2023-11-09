@@ -22,15 +22,10 @@ namespace MediaCollectionMVC.Controllers
         {
             // Get the total number of data objects
             int count = await _context.ScannedMedia.CountAsync();
-
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.ToLower();
-
-            // IQueryable<ScannedMedium> query = _context.ScannedMedia;
-
             IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia  // var media
-                                               where searchTerm == "" || sm.Title.ToLower().Contains(sortField)
+                                               where searchTerm == "" || sm.Title.ToLower().Contains(searchTerm)
                                                select sm);
-
             switch (sortField)
             {
                 // Ascending
