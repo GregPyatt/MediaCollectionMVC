@@ -18,14 +18,18 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums
+        [HttpGet]
         public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10, string sortField = "Title_asc", string searchTerm = "")
         {
             // Get the total number of data objects
-            int count = await _context.ScannedMedia.CountAsync();
+            //int count = await _context.ScannedMedia.CountAsync();
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.ToLower();
-            IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia  // var media
+            IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia  
                                                where searchTerm == "" || sm.Title.ToLower().Contains(searchTerm)
                                                select sm);
+
+            int count = query.Count();
+
             switch (sortField)
             {
                 // Ascending
@@ -109,7 +113,8 @@ namespace MediaCollectionMVC.Controllers
                     PagesSortOrder = (sortField == "Pages_asc") ? "Pages_desc" : "Pages_asc",
                     ISBNSortOrder = (sortField == "ISBN_asc") ? "ISBN_desc" : "ISBN_asc",
                     IsReadSortOrder = (sortField == "IsRead_asc") ? "IsRead_desc" : "IsRead_asc",
-                    LastSort = !string.IsNullOrEmpty(sortField) ? sortField : "Title_asc" 
+                    LastSort = !string.IsNullOrEmpty(sortField) ? sortField : "Title_asc",
+                    LastSearch = searchTerm
                 }
             };
 
@@ -161,10 +166,20 @@ namespace MediaCollectionMVC.Controllers
             return View(model);
         }
 
-        // POST: ScannedMediums/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+
+        //[HttpPost]
+        ////int pageIndex = 1, int pageSize = 10, string sortField = "Title_asc", string searchTerm = ""
+        //public async Task<IActionResult> Index()
+        //{
+
+        //}
+
+
+
+            // POST: ScannedMediums/Create
+            // To protect from overposting attacks, enable the specific properties you want to bind to.
+            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MediaId,Title,Authors,Categories,PublishedDate,Publisher,Pages,Isbn,IsRead,ReadingPeriods,Comments,Summary,CoverPath,IsAudioBook,IsPaperBook,IsPdfbook,IsDonated,DonationDate,Medium,Quality,OktoDonate")] ScannedMedium scannedMedium)
         {

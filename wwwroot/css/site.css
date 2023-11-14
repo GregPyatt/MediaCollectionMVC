@@ -32,8 +32,8 @@ hr {
 }
 
 thead {
-    background-color: #856F4A;
-    color: #8397b9;
+    background-color: rgb(105, 79, 49);
+    color: rgb(131, 151, 185);
 }
 
 td {
@@ -41,7 +41,7 @@ td {
 }
 
 .navbar {
-    background-color: rgb(157, 92, 99);
+    background-color: rgb(105, 79, 49);
 }
 
 /*.navbar-light .navbar-nav .nav-link {

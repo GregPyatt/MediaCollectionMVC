@@ -1,65 +1,74 @@
 ﻿@model ScannedMediumViewModel
 @{
-    int MaxPageButtons = 25;
-    int HalfPageButtons = MaxPageButtons / 2; // Division of integers is rounded down.
-    string pageSortField = Model.MediaSort.LastSort;
+    int maxPageButtons = 24;
+    int halfPageButtons = maxPageButtons / 2; // Division of integers is rounded down.
+    int pages = Model.Pagination.TotalPages;
+    int maxPrintPages = (pages > maxPageButtons) ? maxPageButtons : pages;
+    string sortField = Model.MediaSort.LastSort;
+    string lastSearch = Model.MediaSort.LastSearch;
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Record</a>
 </p>
 <!-- Search still needs work.  For instance when more than 10 records are returned e.g. searching "Programming" -->
-<form asp-action="Index">
+<form asp-controller="Media" id="formSearch" asp-action="Index" method="get">
     <div class="row">
-        <div class="col-md-8">
-            <!-- is the value needed? -->
-            <input name="searchTerm" class="form-control" placeholder="Search by title" value="@ViewData["CurrentFilter"]" /> 
-        </div>
         <div class="col-md-4">
-            <button type="submit" class="btn btn-info">Search</button>
+            <!-- is the value needed? value="ViewData["CurrentFilter"]" -->
+            <input name="searchTerm" id="txtSearchTerm" class="form-control" placeholder="Search by title" value="@lastSearch.ToString()" />
+        </div>
+        <div class="col-md-1">
+            <button type="submit" id="subSearch" class="btn btn-info">Search</button>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" id="subReset" class="btn btn-info" onclick="document.getElementById('txtSearchTerm').value=''; document.getElementById('formSearch').submit();">Reset</button>
+        </div>
+        <div class="col-md-6">
+            <label id="lblSearchTerm" @(string.IsNullOrWhiteSpace(lastSearch) ? "hidden" : "") >Searching title for: "@lastSearch.ToString()"</label>
+            <input type="hidden" id="hidSortField" value="@sortField.ToString()" />
+            <input type="hidden" id="hidPageIndex" value="@Model.Pagination.CurrentPage" />
         </div>
     </div>
 </form>
 <br />
 <!-- Added for pagination -->
 <nav>
-    <ul class="pagination">
+    <ul class="pagination" >
         <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = 1, sortField=pageSortField })">First</a>
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = 1, sortField=sortField, searchTerm=lastSearch })">First</a>
         </li>
         <li class="page-item @(Model.Pagination.CurrentPage == 1 ? "disabled" : "")">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1, sortField=pageSortField })">Previous</a>
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage - 1, sortField=sortField, searchTerm=lastSearch })">Previous</a>
         </li>
-        @if (Model.Pagination.TotalPages >= MaxPageButtons)  // You need to deal with the else case.
-        {
+
+        @{
             switch (Model.Pagination.CurrentPage)
             {
-                case int j when j < HalfPageButtons:
-                    for (int i = 1; i <= MaxPageButtons; i++)
+                case int j when j < halfPageButtons:
+                    for (int i = 1; i <= maxPrintPages; i++)
                     {
                         <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=pageSortField })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=sortField, searchTerm=lastSearch })">@(i < 10 ? Html.Raw("&nbsp;") : "")@i</a>
                         </li>
                     }
                     break;
 
-                case int j when j >= HalfPageButtons && j + MaxPageButtons <= Model.Pagination.TotalPages:
-                        for (int i = Model.Pagination.CurrentPage - HalfPageButtons + 1; i < Model.Pagination.CurrentPage + HalfPageButtons + 1; i++)
+                case int j when j >= halfPageButtons && j + maxPageButtons <= pages:
+                        for (int i = Model.Pagination.CurrentPage - halfPageButtons + 1; i < Model.Pagination.CurrentPage + halfPageButtons + 1; i++)
                         {
                             <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=pageSortField })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=sortField, searchTerm=lastSearch })">@(i < 10 ? Html.Raw("&nbsp;") : "")@i</a>
                             </li>
                         }
                     break;
 
-                case int j when j > Model.Pagination.TotalPages - MaxPageButtons:
-                        for (int i = Model.Pagination.TotalPages - MaxPageButtons; i <= Model.Pagination.TotalPages; i++)
+                case int j when j > pages - maxPageButtons:
+                    for (int i = pages - maxPageButtons; i <= pages; i++)
                         {
                             <li class="page-item @(i == Model.Pagination.CurrentPage ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=pageSortField })">@i</a>
+                            <a class="page-link" href="@Url.Action("Index", new { pageIndex = i, sortField=sortField, searchTerm=lastSearch })">@(i < 10 ? Html.Raw("&nbsp;") : "")@i</a>
                             </li>
                         }
                     break;
@@ -68,11 +77,11 @@
             }
 
         }
-        <li class="page-item @(Model.Pagination.CurrentPage == Model.Pagination.TotalPages ? "disabled" : "")">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage + 1, sortField=pageSortField })">Next</a>
+        <li class="page-item @(Model.Pagination.CurrentPage == pages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.CurrentPage + 1, sortField=sortField, searchTerm=lastSearch })">Next</a>
         </li>
-        <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", new { pageIndex = Model.Pagination.TotalPages, sortField=pageSortField })">Last</a>
+        <li class="page-item  @(Model.Pagination.CurrentPage == pages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { pageIndex = pages, sortField=sortField, searchTerm=lastSearch })">Last</a>
         </li>
     </ul>
 </nav>
@@ -84,36 +93,37 @@
     <thead>
         <tr>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.TitleSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.TitleSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Title)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.AuthorSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.AuthorSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Authors)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.CategorySortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.CategorySortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Categories)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.PublishedDateSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.PublishedDateSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].PublishedDate)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.PublisherSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.PublisherSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Publisher)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.PagesSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.PagesSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Pages)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.ISBNSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.ISBNSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].Isbn)</a>
             </th>
             <th>
-                <a href="/Media/Index?sortField=@Model.MediaSort.IsReadSortOrder">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)</a>
+                <a href="/Media/Index?sortField=@Model.MediaSort.IsReadSortOrder&searchTerm=@lastSearch">@Html.DisplayNameFor(model => model.ScannedMediaObjects[0].IsRead)</a>
             </th>
+            <th></th>
           </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.ScannedMediaObjects) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                <b>@Html.DisplayFor(modelItem => item.Title)</b>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Authors)

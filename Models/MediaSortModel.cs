@@ -11,5 +11,6 @@
         public string ISBNSortOrder { get; set; }
         public string IsReadSortOrder { get; set; }
         public string LastSort { get; set; }
+        public string LastSearch { get; set; }
     }
 }
