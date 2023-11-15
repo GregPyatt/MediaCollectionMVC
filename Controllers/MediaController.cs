@@ -37,7 +37,7 @@ namespace MediaCollectionMVC.Controllers
                     query = query.OrderBy(e => e.Title);
                     break;
                 case "Authors_asc":
-                    query = query.OrderBy(e => e.Authors);
+                    query = query.OrderBy(e => e.Authors_LNFN);
                     break;
                 case "Categories_asc":
                     query = query.OrderBy(e => e.Categories);
@@ -62,7 +62,7 @@ namespace MediaCollectionMVC.Controllers
                     query = query.OrderByDescending(e => e.Title);
                     break;
                 case "Authors_desc":
-                    query = query.OrderByDescending(e => e.Authors);
+                    query = query.OrderByDescending(e => e.Authors_LNFN);
                     break;
                 case "Categories_desc":
                     query = query.OrderByDescending(e => e.Categories);
@@ -176,10 +176,10 @@ namespace MediaCollectionMVC.Controllers
 
 
 
-            // POST: ScannedMediums/Create
-            // To protect from overposting attacks, enable the specific properties you want to bind to.
-            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-            [HttpPost]
+        // POST: ScannedMediums/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MediaId,Title,Authors,Categories,PublishedDate,Publisher,Pages,Isbn,IsRead,ReadingPeriods,Comments,Summary,CoverPath,IsAudioBook,IsPaperBook,IsPdfbook,IsDonated,DonationDate,Medium,Quality,OktoDonate")] ScannedMedium scannedMedium)
         {

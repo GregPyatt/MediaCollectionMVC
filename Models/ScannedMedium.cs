@@ -15,6 +15,9 @@ public partial class ScannedMedium
 
     public string? Authors { get; set; }
 
+    [Display(Name = "Author")]
+    public string? Authors_LNFN { get; set; }
+
     public string? Categories { get; set; }
 
     [NotMapped]
