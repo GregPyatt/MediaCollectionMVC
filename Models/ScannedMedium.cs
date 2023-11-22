@@ -24,7 +24,9 @@ public partial class ScannedMedium
     public List<SelectListItem>? CategoryNames { get; set; }
 
     [Display(Name = "Published Date")]
-    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+    // Somehow, when using a DisplayFormat the date won't show up in the Edit view.
+    //[DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy}", ApplyFormatInEditMode = true)]
+    //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? PublishedDate { get; set; }
 
     public string? Publisher { get; set; }
@@ -38,7 +40,7 @@ public partial class ScannedMedium
     public string Isbn { get; set; } = null!;
 
     [Display(Name = "Is Read")]
-    public bool? IsRead { get; set; }
+    public bool IsRead { get; set; }  //was null
 
     [Display(Name = "Reading Periods")]
     public string? ReadingPeriods { get; set; }
@@ -67,8 +69,59 @@ public partial class ScannedMedium
 
     public string? Medium { get; set; }
 
+    [NotMapped]
+    public List<SelectListItem>? MediumTypes { get; set; }
+
     public string? Quality { get; set; }
 
     [Display(Name = "Is OK to Donate")]
     public bool? OktoDonate { get; set; }
+
+    [Display(Name = "Is Audio Book")]
+    [NotMapped]
+    //Added non-nullable boolean values based on the database for use in views & asp-for type="checkbox" that require non-null bool.
+    public bool IsAudioBookCheckbox
+    {
+        get { return IsAudioBook.GetValueOrDefault() ? true : false; }
+        set => IsAudioBook = value;
+    }
+
+    [Display(Name = "Is Paper Book")]
+    [NotMapped]
+    //Added non-nullable boolean values based on the database for use in views & asp-for type="checkbox" that require non-null bool.
+    public bool IsPaperBookCheckbox
+    {
+        get { return IsPaperBook.GetValueOrDefault() ? true : false; }
+        set => IsPaperBook = value;
+    }
+
+    [Display(Name = "Is PDF Book")]
+    [NotMapped]
+    //Added non-nullable boolean values based on the database for use in views & asp-for type="checkbox" that require non-null bool.
+    public bool IsPdfBookCheckbox
+    {
+        get { return IsPdfbook.GetValueOrDefault() ? true : false; }
+        set => IsPdfbook = value;
+    }
+
+    [Display(Name = "Is Donated")]
+    [NotMapped]
+    //Added non-nullable boolean values based on the database for use in views & asp-for type="checkbox" that require non-null bool.
+    public bool IsDonatedCheckbox
+    {
+        get { return IsDonated.GetValueOrDefault() ? true : false; }
+        set => IsDonated = value;
+    }
+
+
+    [Display(Name = "Is OK to Donate")]
+    [NotMapped]
+    //Added non-nullable boolean values based on the database for use in views & asp-for type="checkbox" that require non-null bool.
+    public bool OktoDonateCheckbox
+    {
+        get { return OktoDonate.GetValueOrDefault() ? true : false; }
+        set => OktoDonate = value;
+    }
+
+
 }

@@ -4,10 +4,11 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>ScannedMedium</h4>
-<hr />
+
+
+<h1>Create a new ScannedMedium</h1>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -22,22 +23,47 @@
                 <input asp-for="Authors" class="form-control" />
                 <span asp-validation-for="Authors" class="text-danger"></span>
             </div>
+            <!-- Category -->
             <div class="form-group">
-                <label asp-for="Categories" class="control-label"></label>
-                <!--<input asp-for="Categories" class="form-control" />-->
-                <select asp-for="Categories" asp-items="Model.CategoryNames"></select>
-                <span asp-validation-for="Categories" class="text-danger"></span>
+                <table>
+                    <tr>
+                       <td class="col-md-3">
+                            <label asp-for="Categories" class="control-label"></label>
+                            <select asp-for="Categories" id="selectCategoriesList" asp-items="Model.CategoryNames" class="form-control"></select>
+                        </td>
+                        <td class="col-md-2" valign="bottom" align="right">
+                            <input type="text" id="newCategoryOption" class="form-control" placeholder="Add new category option">
+                        </td>
+                        <td class="col-md-1" valign="bottom">
+                            <button type="button" id="addCategoryOption" class="btn btn-info">Add</button>
+                            <span asp-validation-for="Categories" class="text-danger"></span>
+                        </td>
+                    </tr>
+                </table>
             </div>
+            <!-- PublishedDate -->
             <div class="form-group">
                 <label asp-for="PublishedDate" class="control-label"></label>
-                <input asp-for="PublishedDate" class="form-control" />
+                <input asp-for="PublishedDate" type="date" class="form-control" asp-format="{0:MM/dd/yyyy}" />
                 <span asp-validation-for="PublishedDate" class="text-danger"></span>
             </div>
+            <!-- Publisher -->
             <div class="form-group">
-                <label asp-for="Publisher" class="control-label"></label>
-                <!--<input asp-for="Publisher" class="form-control" />-->
-                <select asp-for="Publisher" asp-items="Model.PublisherNames"></select>
-                <span asp-validation-for="Publisher" class="text-danger"></span>
+                <table>
+                    <tr>
+                        <td class="col-md-3">
+                            <label asp-for="Publisher" class="control-label"></label>
+                            <select asp-for="Publisher" id="selectPublishersList" asp-items="Model.PublisherNames" class="form-control"></select>
+                        </td>
+                        <td class="col-md-2" valign="bottom" align="right">
+                            <input type="text" id="newPublisherOption" class="form-control" placeholder="Add new publisher option"> 
+                        </td>
+                        <td class="col-md-1" valign="bottom">
+                            <button type="button" id="addPublisherOption" class="btn btn-info">Add</button>
+                            <span asp-validation-for="Publisher" class="text-danger"></span>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="form-group">
                 <label asp-for="Pages" class="control-label"></label>
@@ -49,9 +75,9 @@
                 <input asp-for="Isbn" class="form-control" />
                 <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsRead" class="control-label"></label>
-                <input asp-for="IsRead" class="form-control" />
+            <div class="form-check">
+                <input asp-for="IsRead" class="form-check-input" type="checkbox" />
+                <label asp-for="IsRead" class="form-check-label"></label>
                 <span asp-validation-for="IsRead" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -61,12 +87,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Comments" class="control-label"></label>
-                <input asp-for="Comments" class="form-control" />
+                 <textarea asp-for="Comments" class="form-control"></textarea>
                 <span asp-validation-for="Comments" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Summary" class="control-label"></label>
-                <input asp-for="Summary" class="form-control" />
+                 <textarea asp-for="Summary" class="form-control"></textarea>
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -74,45 +100,59 @@
                 <input asp-for="CoverPath" class="form-control" />
                 <span asp-validation-for="CoverPath" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsAudioBook" class="control-label"></label>
-                <input asp-for="IsAudioBook" class="form-control" />
-                <span asp-validation-for="IsAudioBook" class="text-danger"></span>
+            <div class="form-check">
+                <label asp-for="IsAudioBookCheckbox" class="form-check-label"></label>
+                <input asp-for="IsAudioBookCheckbox" class="form-check-input" />
+                <span asp-validation-for="IsAudioBookCheckbox" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsPaperBook" class="control-label"></label>
-                <input asp-for="IsPaperBook" class="form-control" />
-                <span asp-validation-for="IsPaperBook" class="text-danger"></span>
+            <div class="form-check">
+                <label asp-for="IsPaperBookCheckbox" class="form-check-label"></label>
+                <input asp-for="IsPaperBookCheckbox" class="form-check-input" />
+                <span asp-validation-for="IsPaperBookCheckbox" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsPdfbook" class="control-label"></label>
-                <input asp-for="IsPdfbook" class="form-control" />
-                <span asp-validation-for="IsPdfbook" class="text-danger"></span>
+            <div class="form-check">
+                <label asp-for="IsPdfBookCheckbox" class="form-check-label"></label>
+                <input asp-for="IsPdfBookCheckbox" class="form-check-input" />
+                <span asp-validation-for="IsPdfBookCheckbox" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IsDonated" class="control-label"></label>
-                <input asp-for="IsDonated" class="form-control" />
-                <span asp-validation-for="IsDonated" class="text-danger"></span>
+            <div class="form-check">
+                <label asp-for="IsDonatedCheckbox" class="form-check-label"></label>
+                <input asp-for="IsDonatedCheckbox" class="form-check-input" />
+                <span asp-validation-for="IsDonatedCheckbox" class="text-danger"></span>
             </div>
+            <!-- DonationDate -->
             <div class="form-group">
                 <label asp-for="DonationDate" class="control-label"></label>
-                <input asp-for="DonationDate" class="form-control" />
+                <input asp-for="DonationDate" type="date" class="form-control" />
                 <span asp-validation-for="DonationDate" class="text-danger"></span>
             </div>
+            <!-- Medium -->
             <div class="form-group">
-                <label asp-for="Medium" class="control-label"></label>
-                <input asp-for="Medium" class="form-control" />
-                <span asp-validation-for="Medium" class="text-danger"></span>
+                <table>
+                    <tr>
+                        <td class="col-md-3">
+                            <label asp-for="Medium" class="control-label"></label>
+                            <select asp-for="Medium" id="selectMediaList" asp-items="Model.MediumTypes" class="form-control"></select>
+                        </td>
+                        <td class="col-md-2" valign="bottom" align="right">
+                            <input type="text" id="newMediumOption" class="form-control" placeholder="Add new medium option">
+                        </td>
+                        <td class="col-md-1" valign="bottom">
+                            <button type="button" id="addMediumOption" class="btn btn-info">Add</button>
+                            <span asp-validation-for="Medium" class="text-danger"></span>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="form-group">
                 <label asp-for="Quality" class="control-label"></label>
                 <input asp-for="Quality" class="form-control" />
                 <span asp-validation-for="Quality" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="OktoDonate" class="control-label"></label>
-                <input asp-for="OktoDonate" class="form-control" />
-                <span asp-validation-for="OktoDonate" class="text-danger"></span>
+            <div class="form-check">
+                <label asp-for="OktoDonateCheckbox" class="form-check-label"></label>
+                <input asp-for="OktoDonateCheckbox" class="form-check-input" />
+                <span asp-validation-for="OktoDonateCheckbox" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -128,3 +168,32 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#addCategoryOption').click(function () {
+            var newOption = $('#newCategoryOption').val();
+            if (newOption) {
+                $('#selectCategoriesList').append(new Option(newOption, newOption));
+                $('#newCategoryOption').val('');
+            }
+        });
+
+
+        $('#addPublisherOption').click(function () {
+            var newOption = $('#newPublisherOption').val();
+            if (newOption) {
+                $('#selectPublishersList').append(new Option(newOption, newOption));
+                $('#newPublisherOption').val('');
+            }
+        });
+        $('#addMediumOption').click(function () {
+            var newOption = $('#newMediumOption').val();
+            if (newOption) {
+                $('#selectMediaList').append(new Option(newOption, newOption));
+                $('#newMediumOption').val('');
+            }
+        });
+    });
+</script>

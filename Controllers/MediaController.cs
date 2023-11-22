@@ -162,6 +162,12 @@ namespace MediaCollectionMVC.Controllers
                 .Select(p => new SelectListItem { Value = p, Text = p })
                 .ToList();
 
+            // Populate the MediumTypes property with the distinct mediums from the database
+            model.MediumTypes = _context.ScannedMedia
+                .Select(m => m.Medium)
+                .Distinct()
+                .Select(m => new SelectListItem { Value = m, Text = m })
+                .ToList();
 
             return View(model);
         }
