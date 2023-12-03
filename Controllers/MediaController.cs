@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 
 namespace MediaCollectionMVC.Controllers
@@ -11,6 +12,7 @@ namespace MediaCollectionMVC.Controllers
     public class MediaController : Controller
     {
         private readonly MediaDbContext _context;
+        private readonly object? formCollection;
 
         public MediaController(MediaDbContext context)
         {
@@ -24,9 +26,13 @@ namespace MediaCollectionMVC.Controllers
             // Get the total number of data objects
             //int count = await _context.ScannedMedia.CountAsync();
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.ToLower();
-            IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia  
-                                               where searchTerm == "" || sm.Title.ToLower().Contains(searchTerm)
-                                               select sm);
+            //IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia
+            //                                   where searchTerm == "" || sm.Title.ToLower().Contains(searchTerm)
+            //                                   select sm);
+
+            IQueryable<ScannedMedium> query = _context.ScannedMedia
+                                           .Where(x => x.Title != null && x.Title.ToLower().Contains(searchTerm))
+                                           .Where(x => x.IsPrivate == false);
 
             int count = query.Count();
 
@@ -141,7 +147,7 @@ namespace MediaCollectionMVC.Controllers
         }
 
         // GET: ScannedMediums/Create
-        public async Task<IActionResult> Create()  // You could alternatively use public IActionResult Create() and create the data of the View synchronously.
+        public IActionResult Create()  // You could alternatively use public IActionResult Create() and create the data of the View synchronously.
         {
 
             // This should popuate the dropdown list for CategoryNames
@@ -177,7 +183,6 @@ namespace MediaCollectionMVC.Controllers
         ////int pageIndex = 1, int pageSize = 10, string sortField = "Title_asc", string searchTerm = ""
         //public async Task<IActionResult> Index()
         //{
-
         //}
 
 
@@ -226,6 +231,13 @@ namespace MediaCollectionMVC.Controllers
                     .Select(c => new SelectListItem { Value = c, Text = c })
                     .ToList();
 
+            // Populate the MediumTypes property with the distinct mediums from the database
+            scannedMedium.MediumTypes = _context.ScannedMedia
+                .Select(m => m.Medium)
+                .Distinct()
+                .Select(m => new SelectListItem { Value = m, Text = m })
+                .ToList();
+
             return View(scannedMedium);
         }
 
@@ -234,17 +246,24 @@ namespace MediaCollectionMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MediaId,Title,Authors,Categories,PublishedDate,Publisher,Pages,Isbn,IsRead,ReadingPeriods,Comments,Summary,CoverPath,IsAudioBook,IsPaperBook,IsPdfbook,IsDonated,DonationDate,Medium,Quality,OktoDonate")] ScannedMedium scannedMedium)
+        public async Task<IActionResult> Edit(int id, [Bind("MediaId,Title,Authors,Categories,PublishedDate,Publisher,Pages,Isbn,IsRead,ReadingPeriods,Comments,Summary,CoverPath,IsAudioBook,IsPaperBook,IsPdfbook,IsDonated,DonationDate,Medium,Quality,OktoDonate")] ScannedMedium scannedMedium, Microsoft.AspNetCore.Http.IFormCollection collection)
         {
-            if (id != scannedMedium.MediaId)
-            {
-                return NotFound();
-            }
+            //if (id != scannedMedium.MediaId)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    //Fixing up checkboxes.  This is what you get for having nullable bit fields in your db & bool? in your model.
+                    scannedMedium.OktoDonate = (collection["OkToDonateCheckbox"].ToString().Split(',')[0] == "true") ? true : false;
+                    scannedMedium.IsAudioBook = (collection["IsAudioBookCheckbox"].ToString().Split(',')[0] == "true") ? true : false;
+                    scannedMedium.IsPaperBook = (collection["IsPaperBookCheckbox"].ToString().Split(',')[0] == "true") ? true : false;
+                    scannedMedium.IsPdfbook = (collection["IsPdfbookCheckbox"].ToString().Split(',')[0] == "true") ? true : false;
+                    scannedMedium.IsDonated = (collection["IsDonatedCheckbox"].ToString().Split(',')[0] == "true") ? true : false;
+
                     _context.Update(scannedMedium);
                     await _context.SaveChangesAsync();
                 }
@@ -263,6 +282,9 @@ namespace MediaCollectionMVC.Controllers
             }
             return View(scannedMedium);
         }
+
+
+
 
         // GET: ScannedMediums/Delete/5
         public async Task<IActionResult> Delete(int? id)

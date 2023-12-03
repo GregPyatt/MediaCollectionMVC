@@ -11,7 +11,7 @@ public partial class ScannedMedium
     [Key]
     public int MediaId { get; set; }
 
-    public string? Title { get; set; }
+    public string? Title { get; set; }//= string.Empty;
 
     public string? Authors { get; set; }
 
@@ -26,7 +26,7 @@ public partial class ScannedMedium
     [Display(Name = "Published Date")]
     // Somehow, when using a DisplayFormat the date won't show up in the Edit view.
     //[DisplayFormat(DataFormatString = @"{0:dd\/MM\/yyyy}", ApplyFormatInEditMode = true)]
-    //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
     public DateTime? PublishedDate { get; set; }
 
     public string? Publisher { get; set; }
@@ -65,6 +65,7 @@ public partial class ScannedMedium
     public bool? IsDonated { get; set; }
 
     [Display(Name = "Donation Date")]
+    [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
     public DateTime? DonationDate { get; set; }
 
     public string? Medium { get; set; }
@@ -123,5 +124,7 @@ public partial class ScannedMedium
         set => OktoDonate = value;
     }
 
+    [Display(Name = "Is Private")]
+    public bool IsPrivate { get; set; }
 
 }

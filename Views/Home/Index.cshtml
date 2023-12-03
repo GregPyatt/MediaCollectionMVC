@@ -2,25 +2,51 @@
     ViewData["Title"] = "GregoryPyatt.Net Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to GregoryPyatt.Net</h1>
-    <p>
-        This is my portfolio website. <br />
-        I have a BA degree in Psychology from U.C. Irvine, <br />
-        and a MBA degree from San Francisco State University.
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="display-4 text-center">Welcome to GregoryPyatt.Net</h1>
+        </div>
+    </div>
     <br />
+    <div class="row">
+        <div class="col-md-12 text-center">
+            This is my portfolio website. <br />
+            I have a BA degree in Psychology from U.C. Irvine, <br />
+            and a MBA degree from San Francisco State University.
+        </div>
+    </div>
     <br />
+    <div class="row">
+        <div class="col-md-12 text-center">
+            I am a software developer with experience in C#, ASP.NET Core MVC, SQL, HTML, CSS, JavaScript, and jQuery. <br />
+        </div>
+    </div>
+    <br />
+ 
     <hr />
-        About this website: <br />
-        This is an ASP.NET Core MVC website running on .NET Core 7.0. <br />
-        It is hosted on Microsoft Azure.<br />
-        The source code is hosted on GitHub.<br />
-   </p>
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <h3>My Projects</h3>
+        </div>
+    </div>
 
-   <p>
-       <hr />
-       Links:
-       <br />
-        @Html.ActionLink("Check out my Media Collection app!", "Index", "Media")
-   </p>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+            <ul>
+                <li>
+                    The Media Collection App <a asp-controller="Media" asp-action="Index">Gregory Pyatt's Media Collection App</a>
+                </li>
+            </ul>
+            <b>About this website:</b> <br />
+            This is an ASP.NET Core MVC website running on .NET Core 7.0. <br />
+            It is hosted on Microsoft Azure.<br />
+            The GitHub repository is public and located at: <a href="https://github.com/GregPyatt/MediaCollectionMVC">https://github.com/GregPyatt/MediaCollectionMVC</a>
+       </div>
+    </div>
 </div>
+
+

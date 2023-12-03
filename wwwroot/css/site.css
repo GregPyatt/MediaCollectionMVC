@@ -51,4 +51,23 @@ td {
 a.nav-link.text-dark {
     color: white !important;
     font-size: 48px;  
-}   
+}
+
+.my-buttons {
+    background-color: cornsilk;
+    border-color: #0000ff;
+    color: rgb(64, 54, 38);
+}
+
+.my-create-buttons {
+    background-color: rgb(26, 147, 111);
+    border-color: #0000ff;
+    color: cornsilk;
+    font-size: 24px;
+}
+
+.form-check-label:disabled {
+    background-color: blue !important;
+    color: blue;
+    border-color: blue;
+}

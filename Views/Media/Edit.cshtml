@@ -4,167 +4,180 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="container">
+    <div class="row">
+        <h1>Edit a Media Item</h1>
+    </div>
+    <div class="row">
+        <a asp-action="Index">Back to List</a>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="MediaId" />
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Authors" class="control-label"></label>
+                    <input asp-for="Authors" class="form-control" />
+                    <span asp-validation-for="Authors" class="text-danger"></span>
+                </div>
+                <!-- Category -->
+                <div class="form-group">
+                    <table>
+                        <tr>
+                            <td class="col-md-3">
+                                <label asp-for="Categories" class="control-label"></label>
+                                <select asp-for="Categories" id="selectCategoriesList" asp-items="Model.CategoryNames" class="form-control"></select>
+                            </td>
+                            <td class="col-md-2" valign="bottom" align="right">
+                                <input type="text" id="newCategoryOption" class="form-control" placeholder="Add new category option">
+                            </td>
+                            <td class="col-md-1" valign="bottom">
+                                <button type="button" id="addCategoryOption" class="btn btn-info my-buttons">Add</button>
+                                <span asp-validation-for="Categories" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- PublishedDate -->
+                <div class="form-group col-md-6">
+                    <label asp-for="PublishedDate" class="control-label"></label>
+                    <input asp-for="PublishedDate" class="form-control" type="date" />
+                    <span asp-validation-for="PublishedDate" class="text-danger"></span>
+                </div>
+                <!-- Publisher -->
+                <div class="form-group">
+                    <table>
+                        <tr>
+                            <td class="col-md-3">
+                                <label asp-for="Publisher" class="control-label"></label>
+                                <select asp-for="Publisher" id="selectPublishersList" asp-items="Model.PublisherNames" class="form-control"></select>
+                            </td>
+                            <td class="col-md-2" valign="bottom" align="right">
+                                <input type="text" id="newPublisherOption" class="form-control" placeholder="Add new publisher option">
+                            </td>
+                            <td class="col-md-1" valign="bottom">
+                                <button type="button" id="addPublisherOption" class="btn btn-info my-buttons">Add</button>
+                                <span asp-validation-for="Publisher" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Pages" class="control-label"></label>
+                    <input asp-for="Pages" class="form-control" />
+                    <span asp-validation-for="Pages" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Isbn" class="control-label"></label>
+                    <input asp-for="Isbn" class="form-control" />
+                    <span asp-validation-for="Isbn" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <label asp-for="IsRead" class="form-check-label"></label>
+                    <input asp-for="IsRead" class="form-check-input" />
+                    <span asp-validation-for="IsRead" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReadingPeriods" class="control-label"></label>
+                    <input asp-for="ReadingPeriods" class="form-control" />
+                    <span asp-validation-for="ReadingPeriods" class="text-danger"></span>
+                </div>
 
-<h4>ScannedMedium</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MediaId" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Authors" class="control-label"></label>
-                <input asp-for="Authors" class="form-control" />
-                <span asp-validation-for="Authors" class="text-danger"></span>
-            </div>
-            <!-- Category -->
-            <div class="form-group">
-                <table>
-                    <tr>
-                        <td class="col-md-3">
-                            <label asp-for="Categories" class="control-label"></label>
-                            <select asp-for="Categories" id="selectCategoriesList" asp-items="Model.CategoryNames" class="form-control"></select>
-                        </td>
-                        <td class="col-md-2" valign="bottom" align="right">
-                            <input type="text" id="newCategoryOption" class="form-control" placeholder="Add new category option">
-                        </td>
-                        <td class="col-md-1" valign="bottom">
-                            <button type="button" id="addCategoryOption" class="btn btn-info" >Add</button>
-                            <span asp-validation-for="Categories" class="text-danger"></span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <!-- PublishedDate -->
-            <div class="form-group">
-                <label asp-for="PublishedDate" class="control-label"></label>
-                <input asp-for="PublishedDate" type="date" class="form-control" />
-                <span asp-validation-for="PublishedDate" class="text-danger"></span>
-            </div>
-            <!-- Publisher -->
-            <div class="form-group">
-                <table>
-                    <tr>
-                        <td class="col-md-3">
-                            <label asp-for="Publisher" class="control-label"></label>
-                            <select asp-for="Publisher" id="selectPublishersList" asp-items="Model.PublisherNames" class="form-control"></select>
-                        </td>
-                        <td class="col-md-2" valign="bottom" align="right">
-                            <input type="text" id="newPublisherOption" class="form-control" placeholder="Add new publisher option">
-                        </td>
-                        <td class="col-md-1" valign="bottom">
-                            <button type="button" id="addPublisherOption" class="btn btn-info">Add</button>
-                            <span asp-validation-for="Publisher" class="text-danger"></span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="form-group">
-                <label asp-for="Pages" class="control-label"></label>
-                <input asp-for="Pages" class="form-control" />
-                <span asp-validation-for="Pages" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" />
-                <span asp-validation-for="Isbn" class="text-danger"></span>
-            </div>
-            <div class="form-check">
-                <label asp-for="IsRead" class="form-check-label"></label>
-                <input asp-for="IsRead" class="form-check-input" />
-                <span asp-validation-for="IsRead" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReadingPeriods" class="control-label"></label>
-                <input asp-for="ReadingPeriods" class="form-control" />
-                <span asp-validation-for="ReadingPeriods" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Comments" class="control-label"></label>
-                <textarea asp-for="Comments" class="form-control"></textarea>
-                <span asp-validation-for="Comments" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Summary" class="control-label"></label>
-                <textarea asp-for="Summary" class="form-control"></textarea>
-                <span asp-validation-for="Summary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CoverPath" class="control-label"></label>
-                <input asp-for="CoverPath" class="form-control" />
-                <span asp-validation-for="CoverPath" class="text-danger"></span>
-            </div>
-            <!-- IsAudioBook -->
-            <div class="form-check">
-                <label asp-for="IsAudioBookCheckbox" class="form-check-label"></label>
-                <input asp-for="IsAudioBookCheckbox" class="form-check-input" />
-                <span asp-validation-for="IsAudioBookCheckbox" class="text-danger"></span>
-            </div>
-            <div class="form-check">
-                <label asp-for="IsPaperBookCheckbox" class="form-check-label"></label>
-                <input asp-for="IsPaperBookCheckbox" class="form-check-input" />
-                <span asp-validation-for="IsPaperBookCheckbox" class="text-danger"></span>
-            </div>
-            <div class="form-check">
-                <label asp-for="IsPdfBookCheckbox" class="form-check-label"></label>
-                <input asp-for="IsPdfBookCheckbox" class="form-check-input" />
-                <span asp-validation-for="IsPdfBookCheckbox" class="text-danger"></span>
-            </div>
-            <div class="form-check">
-                <label asp-for="IsDonatedCheckbox" class="form-check-label"></label>
-                <input asp-for="IsDonatedCheckbox" class="form-check-input" />
-                <span asp-validation-for="IsDonatedCheckbox" class="text-danger"></span>
-            </div>
-            <!-- DonationDate -->
-            <div class="form-group">
-                <label asp-for="DonationDate" class="control-label"></label>
-                <input asp-for="DonationDate" type="date" class="form-control" />
-                <span asp-validation-for="DonationDate" class="text-danger"></span>
-            </div>
-            <!--Medium-->
-            <div class="form-group">
-                <table>
-                    <tr>
-                        <td class="col-md-3">
-                            <label asp-for="Medium" class="control-label"></label>
-                            <select asp-for="Medium" id="selectMediaList" asp-items="Model.MediumTypes" class="form-control"></select>
-                        </td>
-                        <td class="col-md-2" valign="bottom" align="right">
-                            <input type="text" id="newMediumOption" class="form-control" placeholder="Add new medium option">
-                        </td>
-                        <td class="col-md-1" valign="bottom">   
-                            <button type="button" id="addMediumOption" class="btn btn-info">Add</button>
-                            <span asp-validation-for="Medium" class="text-danger"></span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quality" class="control-label"></label>
-                <input asp-for="Quality" class="form-control" />
-                <span asp-validation-for="Quality" class="text-danger"></span>
-            </div>
-            <div class="form-check">
-                <label asp-for="OktoDonateCheckbox" class="form-check-label"></label>
-                <input asp-for="OktoDonateCheckbox" class="form-check-input" />
-                <span asp-validation-for="OktoDonateCheckbox" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+            <!-- form divider -->
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label asp-for="Comments" class="control-label"></label>
+                    <textarea asp-for="Comments" class="form-control"></textarea>
+                    <span asp-validation-for="Comments" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Summary" class="control-label"></label>
+                    <textarea asp-for="Summary" class="form-control"></textarea>
+                    <span asp-validation-for="Summary" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CoverPath" class="control-label"></label>
+                    <input asp-for="CoverPath" class="form-control" />
+                    <span asp-validation-for="CoverPath" class="text-danger"></span>
+                </div>
+                <!-- IsAudioBook -->
+                <div class="form-check">
+                    <label asp-for="IsAudioBookCheckbox" class="form-check-label"></label>
+                    <input asp-for="IsAudioBookCheckbox" class="form-check-input" />
+                    <span asp-validation-for="IsAudioBookCheckbox" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <label asp-for="IsPaperBookCheckbox" class="form-check-label"></label>
+                    <input asp-for="IsPaperBookCheckbox" class="form-check-input" />
+                    <span asp-validation-for="IsPaperBookCheckbox" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <label asp-for="IsPdfBookCheckbox" class="form-check-label"></label>
+                    <input asp-for="IsPdfBookCheckbox" class="form-check-input" />
+                    <span asp-validation-for="IsPdfBookCheckbox" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <label asp-for="IsDonatedCheckbox" class="form-check-label"></label>
+                    <input asp-for="IsDonatedCheckbox" class="form-check-input" />
+                    <span asp-validation-for="IsDonatedCheckbox" class="text-danger"></span>
+                </div>
+                <!-- DonationDate -->
+                <div class="form-group col-md-6">
+                    <label asp-for="DonationDate" class="control-label"></label>
+                    <input asp-for="DonationDate" type="date" class="form-control" />
+                    <span asp-validation-for="DonationDate" class="text-danger"></span>
+                </div>
+                <!--Medium-->
+                <div class="form-group">
+                    <table>
+                        <tr>
+                            <td class="col-md-3">
+                                <label asp-for="Medium" class="control-label"></label>
+                                <select asp-for="Medium" id="selectMediaList" asp-items="Model.MediumTypes" class="form-control"></select>
+                            </td>
+                            <td class="col-md-2" valign="bottom" align="right">
+                                <input type="text" id="newMediumOption" class="form-control" placeholder="Add new medium option">
+                            </td>
+                            <td class="col-md-1" valign="bottom">   
+                                <button type="button" id="addMediumOption" class="btn btn-info my-buttons">Add</button>
+                                <span asp-validation-for="Medium" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Quality" class="control-label"></label>
+                    <input asp-for="Quality" class="form-control" />
+                    <span asp-validation-for="Quality" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <label asp-for="OktoDonateCheckbox" class="form-check-label"></label>
+                    <input asp-for="OktoDonateCheckbox" class="form-check-input" />
+                    <span asp-validation-for="OktoDonateCheckbox" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary my-create-buttons" />
+                </div>
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
