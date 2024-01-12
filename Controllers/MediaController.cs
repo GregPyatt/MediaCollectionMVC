@@ -12,7 +12,7 @@ namespace MediaCollectionMVC.Controllers
     public class MediaController : Controller
     {
         private readonly MediaDbContext _context;
-        private readonly object? formCollection;
+        //private readonly object? formCollection;
 
         public MediaController(MediaDbContext context)
         {
@@ -111,14 +111,14 @@ namespace MediaCollectionMVC.Controllers
                 },
                 MediaSort = new MediaSortModel
                 {
-                    TitleSortOrder = (sortField == "Title_asc") ? "Title_desc" : "Title_asc",
-                    AuthorSortOrder = (sortField == "Authors_asc") ? "Authors_desc" : "Authors_asc",
-                    CategorySortOrder = (sortField == "Categories_asc") ? "Categories_desc" : "Categories_asc",
-                    PublishedDateSortOrder = (sortField == "PublishedDate_asc") ? "PublishedDate_desc" : "PublishedDate_asc",
-                    PublisherSortOrder = (sortField == "Publisher_asc") ? "Publisher_desc" : "Publisher_asc",
-                    PagesSortOrder = (sortField == "Pages_asc") ? "Pages_desc" : "Pages_asc",
-                    ISBNSortOrder = (sortField == "ISBN_asc") ? "ISBN_desc" : "ISBN_asc",
-                    IsReadSortOrder = (sortField == "IsRead_asc") ? "IsRead_desc" : "IsRead_asc",
+                    Title = (sortField == "Title_asc") ? "Title_desc" : "Title_asc",
+                    Authors = (sortField == "Authors_asc") ? "Authors_desc" : "Authors_asc",
+                    Categories = (sortField == "Categories_asc") ? "Categories_desc" : "Categories_asc",
+                    PublishedDate = (sortField == "PublishedDate_asc") ? "PublishedDate_desc" : "PublishedDate_asc",
+                    Publisher = (sortField == "Publisher_asc") ? "Publisher_desc" : "Publisher_asc",
+                    Pages = (sortField == "Pages_asc") ? "Pages_desc" : "Pages_asc",
+                    ISBN = (sortField == "ISBN_asc") ? "ISBN_desc" : "ISBN_asc",
+                    IsRead = (sortField == "IsRead_asc") ? "IsRead_desc" : "IsRead_asc",
                     LastSort = !string.IsNullOrEmpty(sortField) ? sortField : "Title_asc",
                     LastSearch = searchTerm
                 }
