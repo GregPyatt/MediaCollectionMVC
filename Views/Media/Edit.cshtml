@@ -12,9 +12,10 @@
         <a asp-action="Index">Back to List</a>
     </div>
     <hr />
+    <form asp-controller="Media" asp-action="Edit" method="post">
     <div class="row">
         <div class="col-md-6">
-            <form asp-action="Edit" />
+            
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="MediaId" />
                 <div class="form-group">
@@ -170,6 +171,7 @@
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary my-create-buttons" />
                 </div>
+                </form>
     </div>
 </div>
 

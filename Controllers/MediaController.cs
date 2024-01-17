@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
+using System.Linq.Expressions;
 
 namespace MediaCollectionMVC.Controllers
 {
@@ -23,83 +24,56 @@ namespace MediaCollectionMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10, string sortField = "Title_asc", string searchTerm = "")
         {
-            // Get the total number of data objects
-            //int count = await _context.ScannedMedia.CountAsync();
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.ToLower();
-            //IQueryable<ScannedMedium> query = (from sm in _context.ScannedMedia
-            //                                   where searchTerm == "" || sm.Title.ToLower().Contains(searchTerm)
-            //                                   select sm);
 
             IQueryable<ScannedMedium> query = _context.ScannedMedia
-                                           .Where(x => x.Title != null && x.Title.ToLower().Contains(searchTerm))
-                                           .Where(x => x.IsPrivate == false);
+                                               .Where(x => x.Title != null && x.Title.ToLower().Contains(searchTerm))
+                                               .Where(x => x.IsPrivate == false);
 
-            int count = query.Count();
 
-            switch (sortField)
+            var sortOptions = new Dictionary<string, Expression<Func<ScannedMedium, object>>>
             {
-                // Ascending
-                case "Title_asc":
-                    query = query.OrderBy(e => e.Title);
-                    break;
-                case "Authors_asc":
-                    query = query.OrderBy(e => e.Authors_LNFN);
-                    break;
-                case "Categories_asc":
-                    query = query.OrderBy(e => e.Categories);
-                    break;
-                case "PublishedDate_asc":
-                    query = query.OrderBy(e => e.PublishedDate);
-                    break;
-                case "Publisher_asc":
-                    query = query.OrderBy(e => e.Publisher);
-                    break;
-                case "Pages_asc":
-                    query = query.OrderBy(e => e.Pages);
-                    break;
-                case "Isbn_asc":
-                    query = query.OrderBy(e => e.Isbn);
-                    break;
-                case "IsRead_asc":
-                    query = query.OrderBy(e => e.IsRead);
-                    break;
-                // Descending
-                case "Title_desc":
-                    query = query.OrderByDescending(e => e.Title);
-                    break;
-                case "Authors_desc":
-                    query = query.OrderByDescending(e => e.Authors_LNFN);
-                    break;
-                case "Categories_desc":
-                    query = query.OrderByDescending(e => e.Categories);
-                    break;
-                case "PublishedDate_desc":
-                    query = query.OrderByDescending(e => e.PublishedDate);
-                    break;
-                case "Publisher_desc":
-                    query = query.OrderByDescending(e => e.Publisher);
-                    break;
-                case "Pages_desc":
-                    query = query.OrderByDescending(e => e.Pages);
-                    break;
-                case "Isbn_desc":
-                    query = query.OrderByDescending(e => e.Isbn);
-                    break;
-                case "IsRead_desc":
-                    query = query.OrderByDescending(e => e.IsRead);
-                    break;
+                {"Title_asc", e => e.Title},
+                {"Authors_asc", e => e.Authors_LNFN},
+                {"Categories_asc", e => e.Categories},
+                {"PublishedDate_asc", e => e.PublishedDate},
+                {"Publisher_asc", e => e.Publisher},
+                {"Pages_asc", e => e.Pages},
+                {"Isbn_asc", e => e.Isbn},
+                {"IsRead_asc", e => e.IsRead},
+                {"Title_desc", e => e.Title},
+                {"Authors_desc", e => e.Authors_LNFN},
+                {"Categories_desc", e => e.Categories},
+                {"PublishedDate_desc", e => e.PublishedDate},
+                {"Publisher_desc", e => e.Publisher},
+                {"Pages_desc", e => e.Pages},
+                {"Isbn_desc", e => e.Isbn},
+                {"IsRead_desc", e => e.IsRead}
+            };
 
-                default:
-                    query = query.OrderBy(e => e.Title);
-                    break;
+            if (sortOptions.ContainsKey(sortField))
+            {
+                if (sortField.EndsWith("_asc"))
+                {
+                    query = query.OrderBy(sortOptions[sortField]);
+                }
+                else
+                {
+                    query = query.OrderByDescending(sortOptions[sortField]);
+                }
+            }
+            else
+            {
+                query = query.OrderBy(e => e.Title);
             }
 
-            query = query.Skip((pageIndex - 1) * pageSize);
-            query = query.Take(pageSize);
+            var count = await query.CountAsync();
 
-            var dataObjects = await query.ToListAsync();
+            var dataObjects = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
-            // Create a new instance of your view model
             var model = new ScannedMediumViewModel
             {
                 ScannedMediaObjects = dataObjects,
@@ -149,41 +123,25 @@ namespace MediaCollectionMVC.Controllers
         // GET: ScannedMediums/Create
         public IActionResult Create()  // You could alternatively use public IActionResult Create() and create the data of the View synchronously.
         {
-
-            // This should popuate the dropdown list for CategoryNames
-            // Create a new model
-            var model = new ScannedMedium();
-
-            // Populate the CategoryNames property with the distinct categories from the database
-            model.CategoryNames = _context.ScannedMedia
-                .Select(m => m.Categories)
-                .Distinct()
-                .Select(c => new SelectListItem { Value = c, Text = c })
-                .ToList();
-
-            // Populate the PublisherNames property with the distinct publishers from the database
-            model.PublisherNames = _context.ScannedMedia
-                .Select(m => m.Publisher)
-                .Distinct()
-                .Select(p => new SelectListItem { Value = p, Text = p })
-                .ToList();
-
-            // Populate the MediumTypes property with the distinct mediums from the database
-            model.MediumTypes = _context.ScannedMedia
-                .Select(m => m.Medium)
-                .Distinct()
-                .Select(m => new SelectListItem { Value = m, Text = m })
-                .ToList();
+            var model = new ScannedMedium
+            {
+                CategoryNames = GetDistinctValues(m => m.Categories),
+                PublisherNames = GetDistinctValues(m => m.Publisher),
+                MediumTypes = GetDistinctValues(m => m.Medium)
+            };
 
             return View(model);
         }
 
-
-        //[HttpPost]
-        ////int pageIndex = 1, int pageSize = 10, string sortField = "Title_asc", string searchTerm = ""
-        //public async Task<IActionResult> Index()
-        //{
-        //}
+        private List<SelectListItem> GetDistinctValues(Func<ScannedMedium, string> selector)
+        {
+            return _context.ScannedMedia
+                .Select(selector)
+                .Distinct()
+                .Select(value => new SelectListItem { Value = value, Text = value })
+                .OrderBy(item => item.Text)
+                .ToList();
+        }
 
 
 
