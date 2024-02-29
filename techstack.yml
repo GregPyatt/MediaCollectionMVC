@@ -2,7 +2,7 @@ repo_name: GregPyatt/MediaCollectionMVC
 report_id: 489914bd96373c325baba60bbbd537e5
 version: 0.1
 repo_type: Public
-timestamp: '2024-02-03T08:43:13+00:00'
+timestamp: '2024-02-29T19:51:17+00:00'
 requested_by: GregPyatt
 provider: github
 branch: master
@@ -114,7 +114,7 @@ tools:
   last_updated_by: Greg Pyatt
   last_updated_on: 2024-01-12 08:19:09.000000000 Z
 - name: Entity Framework Core
-  description: 'Lightweight and cross-platform version of the popular Entity Framework '
+  description: Lightweight and cross-platform version of the popular Entity Framework
   website_url: https://docs.microsoft.com/en-us/ef/core/
   license: MIT
   open_source: true
