@@ -74,6 +74,8 @@ public partial class ScannedMedium
     public List<SelectListItem>? MediumTypes { get; set; }
 
     public string? Quality { get; set; }
+    [NotMapped]
+    public List<SelectListItem>? QualityCategories { get; set; }
 
     [Display(Name = "Is OK to Donate")]
     public bool? OktoDonate { get; set; }

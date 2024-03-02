@@ -85,18 +85,11 @@
                     <input asp-for="IsRead" class="form-check-input" />
                     <span asp-validation-for="IsRead" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ReadingPeriods" class="control-label"></label>
-                    <input asp-for="ReadingPeriods" class="form-control" />
-                    <span asp-validation-for="ReadingPeriods" class="text-danger"></span>
-                </div>
-
             </div>
 
             <!-- form divider -->
 
             <div class="col-md-6">
-
                 <div class="form-group">
                     <label asp-for="Comments" class="control-label"></label>
                     <textarea asp-for="Comments" class="form-control"></textarea>
@@ -106,11 +99,6 @@
                     <label asp-for="Summary" class="control-label"></label>
                     <textarea asp-for="Summary" class="form-control"></textarea>
                     <span asp-validation-for="Summary" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CoverPath" class="control-label"></label>
-                    <input asp-for="CoverPath" class="form-control" />
-                    <span asp-validation-for="CoverPath" class="text-danger"></span>
                 </div>
                 <!-- IsAudioBook -->
                 <div class="form-check">
@@ -139,25 +127,9 @@
                     <input asp-for="DonationDate" type="date" class="form-control" />
                     <span asp-validation-for="DonationDate" class="text-danger"></span>
                 </div>
-                <!--Medium-->
-                <div class="form-group">
-                    <table>
-                        <tr>
-                            <td class="col-md-3">
-                                <label asp-for="Medium" class="control-label"></label>
-                                <select asp-for="Medium" id="selectMediaList" asp-items="Model.MediumTypes" class="form-control"></select>
-                            </td>
-                            <td class="col-md-2" valign="bottom" align="right">
-                                <input type="text" id="newMediumOption" class="form-control" placeholder="Add new medium option">
-                            </td>
-                            <td class="col-md-1" valign="bottom">   
-                                <button type="button" id="addMediumOption" class="btn btn-info my-buttons">Add</button>
-                                <span asp-validation-for="Medium" class="text-danger"></span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="form-group">
+ 
+                <!-- Quality -->
+                <div class="form-group col-md-6">
                     <label asp-for="Quality" class="control-label"></label>
                     <input asp-for="Quality" class="form-control" />
                     <span asp-validation-for="Quality" class="text-danger"></span>
@@ -204,13 +176,13 @@
             }
         });
 
-        $('#addMediumOption').click(function () {
-            var newOption = $('#newMediumOption').val();
-            if (newOption) {
-                $('#selectMediaList').append(new Option(newOption, newOption));
-                $('#newMediumOption').val('');
-            }
-        });
+        // $('#addMediumOption').click(function () {
+        //     var newOption = $('#newMediumOption').val();
+        //     if (newOption) {
+        //         $('#selectMediaList').append(new Option(newOption, newOption));
+        //         $('#newMediumOption').val('');
+        //     }
+        // });
     });
 </script>
 

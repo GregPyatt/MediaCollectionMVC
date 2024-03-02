@@ -127,7 +127,14 @@ namespace MediaCollectionMVC.Controllers
             {
                 CategoryNames = GetDistinctValues(m => m.Categories),
                 PublisherNames = GetDistinctValues(m => m.Publisher),
-                MediumTypes = GetDistinctValues(m => m.Medium)
+                QualityCategories = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "New", Text = "New" },
+                    new SelectListItem { Value = "Used - Like New", Text = "Used - Like New" },
+                    new SelectListItem { Value = "Used - Very Good", Text = "Used - Very Good" },
+                    new SelectListItem { Value = "Used - Good", Text = "Used - Good" },
+                    new SelectListItem { Value = "Unacceptable", Text = "Unacceptable" }
+                }
             };
 
             return View(model);
@@ -183,18 +190,12 @@ namespace MediaCollectionMVC.Controllers
                     .Select(c => new SelectListItem { Value = c, Text = c })
                     .ToList();
 
+            // Populate the PublisherNames property with the distinct PublisherNames from the database
             scannedMedium.PublisherNames = _context.ScannedMedia
                     .Select(m => m.Publisher)
                     .Distinct()
                     .Select(c => new SelectListItem { Value = c, Text = c })
                     .ToList();
-
-            // Populate the MediumTypes property with the distinct mediums from the database
-            scannedMedium.MediumTypes = _context.ScannedMedia
-                .Select(m => m.Medium)
-                .Distinct()
-                .Select(m => new SelectListItem { Value = m, Text = m })
-                .ToList();
 
             return View(scannedMedium);
         }
